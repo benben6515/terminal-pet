@@ -1,0 +1,35 @@
+pet:
+  name: "Nyan"
+  animation_speed: 0.5  # seconds per frame (2 fps)
+  movement_speed: 0.5    # cells per second (slower movement)
+  screen_wrap: true     # wrap around screen edges
+
+stats:
+  hunger_decay: 0.5      # per second
+  mood_decay: 0.3        # per second
+  energy_decay: 0.2      # per second
+  max_value: 100
+  min_value: 0
+  initial_hunger: 80
+  initial_mood: 80
+  initial_energy: 80
+
+colors:
+  rainbow_gradient: [196, 214, 226, 46, 27, 201]
+  star_colors: [241, 240, 239]
+  body_color: 196
+  face_color: 255
+  pop_tart_color: 231
+
+controls:
+  feed_key: f
+  play_key: p
+  pet_key: t
+  sleep_key: s
+  quit_key: q
+  help_key: h
+
+display:
+  show_stats_always: true
+  stats_position: bottom
+  background_stars: 8
