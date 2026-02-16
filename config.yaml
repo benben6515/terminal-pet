@@ -1,13 +1,13 @@
 pet:
   name: "Nyan"
-  animation_speed: 0.5  # seconds per frame (2 fps)
-  movement_speed: 0.5    # cells per second (slower movement)
-  screen_wrap: true     # wrap around screen edges
+  animation_speed: 0.5
+  movement_speed: 0.5
+  screen_wrap: true
 
 stats:
-  hunger_decay: 0.5      # per second
-  mood_decay: 0.3        # per second
-  energy_decay: 0.2      # per second
+  hunger_decay: 0.5
+  mood_decay: 0.3
+  energy_decay: 0.2
   max_value: 100
   min_value: 0
   initial_hunger: 80
@@ -16,7 +16,7 @@ stats:
 
 colors:
   rainbow_gradient: [196, 214, 226, 46, 27, 201]
-  star_colors: [241, 240, 239]
+  star_colors: [241, 240, 239, 229, 228]
   body_color: 196
   face_color: 255
   pop_tart_color: 231
@@ -32,4 +32,49 @@ controls:
 display:
   show_stats_always: true
   stats_position: bottom
-  background_stars: 8
+  background_stars: 12
+
+cat_states:
+  idle:
+    animation_speed: 0.5
+    movement_speed: 0.5
+  walking:
+    animation_speed: 0.4
+    movement_speed: 0.7
+  eating:
+    animation_speed: 0.3
+    movement_speed: 0.0
+  sleeping:
+    animation_speed: 1.0
+    movement_speed: 0.0
+  grooming:
+    animation_speed: 0.25
+    movement_speed: 0.0
+  playing:
+    animation_speed: 0.2
+    movement_speed: 1.5
+  stretching:
+    animation_speed: 0.4
+    movement_speed: 0.0
+  hungry:
+    animation_speed: 0.6
+    movement_speed: 0.3
+  happy:
+    animation_speed: 0.35
+    movement_speed: 0.6
+  sad:
+    animation_speed: 0.8
+    movement_speed: 0.2
+
+behaviors:
+  grooming_interval_min: 15
+  grooming_interval_max: 25
+  stretch_interval_min: 30
+  stretch_interval_max: 45
+  zoomie_interval_min: 20
+  zoomie_interval_max: 40
+  zoomie_probability: 0.1
+  nap_threshold: 20
+  hungry_threshold: 30
+  sad_threshold: 30
+  happy_threshold: 80
