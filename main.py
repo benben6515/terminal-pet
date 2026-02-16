@@ -24,46 +24,58 @@ def main():
 
     term = Terminal()
 
-    with term.hidden_cursor():
-        sys.stdout.write("\x1b[2J\x1b[H")  # Clear screen and home
-        print(
-            term.center(term.bold + "Welcome to NYAN CAT Terminal Pet!" + term.normal)
-        )
-        print(term.center(term.dim + "Initializing..." + term.normal))
+    SMCUP = "\x1b[?1049h"
+    RMCUP = "\x1b[?1049l"
 
-        pet = Pet(term, config)
+    sys.stdout.write(SMCUP)
+    sys.stdout.flush()
 
-        with term.cbreak():
-            last_render_time = time.time()
-            animation_speed = config["pet"]["animation_speed"]
-            while True:
-                key = term.inkey(timeout=0.016)
+    try:
+        with term.hidden_cursor():
+            sys.stdout.write("\x1b[2J\x1b[H")
+            print(
+                term.center(
+                    term.bold + "Welcome to NYAN CAT Terminal Pet!" + term.normal
+                )
+            )
+            print(term.center(term.dim + "Initializing..." + term.normal))
 
-                if key:
-                    action = pet.handle_input(key)
+            pet = Pet(term, config)
 
-                    if action == "quit":
-                        print("\x1b[2J\x1b[H")  # Clear screen
-                        print(
-                            term.center(
-                                term.bold
-                                + "Goodbye! Thanks for playing with Nyan! 😸"
-                                + term.normal
+            with term.cbreak():
+                last_render_time = time.time()
+                animation_speed = config["pet"]["animation_speed"]
+                while True:
+                    key = term.inkey(timeout=0.016)
+
+                    if key:
+                        action = pet.handle_input(key)
+
+                        if action == "quit":
+                            print("\x1b[2J\x1b[H")
+                            print(
+                                term.center(
+                                    term.bold
+                                    + "Goodbye! Thanks for playing with Nyan! 😸"
+                                    + term.normal
+                                )
                             )
-                        )
-                        print(
-                            term.center(
-                                term.dim + "Press any key to exit..." + term.normal
+                            print(
+                                term.center(
+                                    term.dim + "Press any key to exit..." + term.normal
+                                )
                             )
-                        )
-                        term.inkey()
-                        break
+                            term.inkey()
+                            break
 
-                current_time = time.time()
-                if current_time - last_render_time >= animation_speed:
-                    pet.update()
-                    last_render_time = current_time
-                    pet.render()
+                    current_time = time.time()
+                    if current_time - last_render_time >= animation_speed:
+                        pet.update()
+                        last_render_time = current_time
+                        pet.render()
+    finally:
+        sys.stdout.write(RMCUP)
+        sys.stdout.flush()
 
 
 if __name__ == "__main__":

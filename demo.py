@@ -26,61 +26,61 @@ def visual_demo():
 
     term = Terminal()
 
-    with term.fullscreen(), term.hidden_cursor():
-        graphics = Graphics(term, config)
-        animation = Animation(term, config)
+    graphics = Graphics(term, config)
+    animation = Animation(term, config)
 
-        start_time = time.time()
-        frame_count = 0
+    start_time = time.time()
+    frame_count = 0
 
-        try:
-            sys.stdout.write(term.clear())
-            frame_count = 0
+    SMCUP = "\x1b[?1049h"
+    RMCUP = "\x1b[?1049l"
 
-            while time.time() - start_time < 3:
-                sys.stdout.write(term.home + term.clear_eos())
+    sys.stdout.write(SMCUP)
+    sys.stdout.flush()
 
-                cat_x, cat_y = animation.get_position()
-                frame_index = animation.get_frame_index()
-                rainbow_offset = animation.get_rainbow_offset()
+    try:
+        while time.time() - start_time < 3:
+            cat_x, cat_y = animation.get_position()
+            frame_index = animation.get_frame_index()
+            rainbow_offset = animation.get_rainbow_offset()
 
-                output = []
+            screen_height = term.height
+            screen_width = term.width
 
-                stars = graphics.render_stars()
-                for y, x, star in stars:
-                    output.append(term.move(y, x) + star)
+            output = [term.clear()]
 
-                rainbow_tail = graphics.render_rainbow_tail(
-                    cat_x, cat_y, 10, rainbow_offset
-                )
-                for y, x, segment in rainbow_tail:
-                    if x >= 0:
-                        output.append(term.move(y, x) + segment)
+            stars = graphics.render_stars()
+            for y, x, star in stars:
+                output.append(term.move(y, x) + star)
 
-                cat_lines = graphics.render_cat(
-                    cat_x, cat_y, frame_index, rainbow_offset
-                )
-                for line_index, line in enumerate(cat_lines):
-                    output.append(term.move(cat_y + line_index, cat_x) + line)
+            rainbow_tail = graphics.render_rainbow_tail(
+                cat_x, cat_y, 10, rainbow_offset
+            )
+            for y, x, segment in rainbow_tail:
+                if x >= 0:
+                    output.append(term.move(y, x) + segment)
 
-                sys.stdout.write("".join(output))
-                sys.stdout.flush()
+            cat_lines = graphics.render_cat(cat_x, cat_y, frame_index, rainbow_offset)
+            for line_index, line in enumerate(cat_lines):
+                output.append(term.move(cat_y + line_index, cat_x) + line)
 
-                animation.update(0.016)
-                frame_count += 1
+            sys.stdout.write("".join(output))
+            sys.stdout.flush()
 
-                time.sleep(0.016)
+            animation.update(0.016)
+            frame_count += 1
 
-        except KeyboardInterrupt:
-            pass
+            time.sleep(0.016)
 
-        sys.stdout.write(term.clear())
-        sys.stdout.write(f"\nDemo complete! Rendered {frame_count} frames.\n")
-        sys.stdout.write(
-            "\nRun 'python main.py' for the full interactive experience!\n"
-        )
-        sys.stdout.write("Press 'h' for help when running the full version.\n")
+    except KeyboardInterrupt:
+        pass
+    finally:
+        sys.stdout.write(RMCUP)
         sys.stdout.flush()
+
+    print(f"\nDemo complete! Rendered {frame_count} frames.\n")
+    print("\nRun 'python main.py' for the full interactive experience!\n")
+    print("Press 'h' for help when running the full version.\n")
 
 
 if __name__ == "__main__":
